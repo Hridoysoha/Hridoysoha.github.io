@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BND DROP — Complete Tasks, Earn USDT</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{
+    --bg:#0b0e17; --card:#151a2b; --card2:#1b2140; --line:#262d4d;
+    --text:#f2f4ff; --muted:#9aa3c7; --gold:#f5b942; --gold2:#ffcf6b;
+    --green:#2fd48c; --red:#ff6b6b; --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;min-height:100vh}
+  .wrap{max-width:480px;margin:0 auto;padding:16px 14px 110px}
+  /* Header */
+  header{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 14px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#2a2110,#171106);border:1px solid #4a3a14;display:flex;align-items:center;justify-content:center}
+  .brand h1{font-size:19px;letter-spacing:.6px}
+  .brand h1 span{color:var(--gold)}
+  .brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.4px}
+  .bal-pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:700;font-size:14px;color:var(--gold2)}
+  .bal-pill small{color:var(--muted);font-weight:600;font-size:10px;display:block;text-align:right;letter-spacing:.5px}
+  /* Hero */
+  .hero{background:linear-gradient(135deg,#3a2a08,#171106 55%,#101728);border:1px solid #4a3a14;border-radius:22px;padding:20px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(245,185,66,.35),transparent 70%)}
+  .hero .lbl{color:var(--muted);font-size:12px;letter-spacing:1.2px;text-transform:uppercase}
+  .hero .amt{font-size:38px;font-weight:800;margin:4px 0 2px}
+  .hero .amt span{color:var(--gold);font-size:19px;font-weight:700}
+  .hero .sub{color:var(--muted);font-size:13px}
+  .hero .row{display:flex;gap:10px;margin-top:16px;position:relative;z-index:1}
+  .stat{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 12px}
+  .stat b{font-size:16px}
+  .stat small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+  /* Section */
+  h2.sec{font-size:16px;margin:22px 2px 6px;display:flex;align-items:center;gap:8px}
+  .sec-note{color:var(--muted);font-size:12.5px;margin:0 2px 12px;line-height:1.5}
+  /* Task card */
+  .task{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:10px}
+  .ava{width:50px;height:50px;border-radius:15px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#0b0e17}
+  .task .info{flex:1;min-width:0}
+  .task .name{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .task .meta{color:var(--muted);font-size:12px;margin-top:2px}
+  .task .reward{color:var(--green);font-weight:800;font-size:13px;margin-top:3px}
+  .btn{border:none;border-radius:12px;padding:11px 16px;font-weight:800;font-size:13.5px;cursor:pointer;flex:none;transition:.15s}
+  .btn:active{transform:scale(.96)}
+  .btn-join{background:var(--gold);color:#23180a}
+  .btn-claim{background:var(--green);color:#06281a}
+  .btn-done{background:var(--card2);color:var(--muted);cursor:default}
+  .btn[disabled]{opacity:.75;cursor:default}
+  /* Wallet */
+  .wcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+  .wcard h3{font-size:14px;margin-bottom:4px}
+  .wcard p{color:var(--muted);font-size:12.5px;line-height:1.55}
+  label{display:block;font-size:12px;color:var(--muted);margin:13px 0 6px;letter-spacing:.4px}
+  input{width:100%;background:#0e1222;border:1px solid var(--line);border-radius:12px;padding:13px;color:var(--text);font-size:14px;outline:none}
+  input:focus{border-color:var(--gold)}
+  .btn-wide{width:100%;background:var(--gold);color:#23180a;padding:14px;font-size:15px;margin-top:16px;border-radius:13px}
+  .chiprow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chip{background:var(--card2);border:1px solid var(--line);color:var(--muted);font-size:11.5px;padding:6px 10px;border-radius:999px}
+  .chip b{color:var(--gold2)}
+  .wd-item{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+  .wd-item:last-child{border-bottom:none}
+  .wd-item .a{font-weight:700}
+  .wd-item .d{color:var(--muted);font-size:11.5px;margin-top:2px;word-break:break-all}
+  .badge{background:#3a2f10;color:var(--gold2);border:1px solid #6b5518;font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;white-space:nowrap}
+  .empty{color:var(--muted);font-size:13px;text-align:center;padding:14px 0}
+  .reset{background:none;border:none;color:var(--muted);font-size:12px;text-decoration:underline;cursor:pointer;display:block;margin:18px auto 0}
+  /* Tabs */
+  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(13,16,28,.96);border-top:1px solid var(--line);backdrop-filter:blur(8px);z-index:5}
+  nav .in{max-width:480px;margin:0 auto;display:flex}
+  nav button{flex:1;background:none;border:none;color:var(--muted);padding:11px 0 13px;font-size:12px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+  nav button.on{color:var(--gold)}
+  nav svg{width:22px;height:22px}
+  .page{display:none}.page.on{display:block}
+  /* Toast */
+  #toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#1e2b1e;border:1px solid var(--green);padding:12px 18px;border-radius:13px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:9;max-width:90vw;text-align:center;color:#d9ffef}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast.err{border-color:var(--red);color:#ffd9d9;background:#2b1e1e}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.25);border-top-color:#06281a;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2.7C12 2.7 5.5 10.2 5.5 14.6C5.5 18.2 8.4 21.3 12 21.3C15.6 21.3 18.5 18.2 18.5 14.6C18.5 10.2 12 2.7 12 2.7Z" fill="#f5b942"/><path d="M9 14.8C9 16.9 10.3 18.6 12.1 19.1C10.9 17.4 10.3 15.6 10.3 13.5C10.3 12.4 10.5 11.3 10.9 10.2C9.8 11.5 9 13.1 9 14.8Z" fill="#ffdf9e"/></svg>
+      </div>
+      <div>
+        <h1>BND <span>DROP</span></h1>
+        <small id="hello">Complete tasks • Earn USDT</small>
+      </div>
+    </div>
+    <div class="bal-pill"><small>BALANCE</small>$<span id="pillBal">0.00</span></div>
+  </header>
+
+  <!-- TASKS PAGE -->
+  <section id="page-tasks" class="page on">
+    <div class="hero">
+      <div class="lbl">Total Balance</div>
+      <div class="amt">$<span id="heroBal">0.00</span> <span>USDT</span></div>
+      <div class="sub">Join channels, complete tasks, stack your drops.</div>
+      <div class="row">
+        <div class="stat"><b id="statDone">0</b><small>Tasks completed</small></div>
+        <div class="stat"><b>$<span id="statEarned">0.00</span></b><small>Total earned</small></div>
+        <div class="stat"><b>$<span id="statPer">0.50</span></b><small>Per task</small></div>
+      </div>
+    </div>
+
+    <h2 class="sec">Today's Tasks</h2>
+    <p class="sec-note">Tap <b style="color:var(--gold2)">Join</b>, join the channel, come back and tap <b style="color:var(--green)">Claim</b> — $0.50 USDT lands in your wallet instantly.</p>
+    <div id="taskList"></div>
+  </section>
+
+  <!-- WALLET PAGE -->
+  <section id="page-wallet" class="page">
+    <h2 class="sec" style="margin-top:6px">My Wallet</h2>
+    <p class="sec-note">Your earned USDT (demo) is stored here. Withdraw to your own wallet on the BNB Chain.</p>
+
+    <div class="wcard">
+      <h3>Withdraw USDT</h3>
+      <p>Minimum withdraw <b style="color:var(--gold2)">$10.00</b> • Network: <b style="color:var(--gold2)">BNB Chain (BEP20) only</b>. Requests are processed on schedule after review.</p>
+      <label>WALLET ADDRESS (BEP20)</label>
+      <input id="wdAddr" type="text" placeholder="0x..." autocomplete="off" spellcheck="false">
+      <label>AMOUNT (USDT)</label>
+      <input id="wdAmt" type="number" min="10" step="0.01" placeholder="10.00">
+      <button class="btn btn-wide" id="wdBtn">Request Withdraw</button>
+      <div class="chiprow">
+        <span class="chip">Min: <b>$10</b></span>
+        <span class="chip">Network: <b>BNB Chain</b></span>
+        <span class="chip">Fee: <b>Free (demo)</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <h3>Withdraw History</h3>
+      <div id="wdList"><div class="empty">No withdraw requests yet.</div></div>
+    </div>
+
+    <button class="reset" id="resetBtn">Reset demo data</button>
+  </section>
+</div>
+
+<nav>
+  <div class="in">
+    <button id="tabTasks" class="on">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" stroke-linejoin="round"/></svg>
+      Tasks
+    </button>
+    <button id="tabWallet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/></svg>
+      Wallet
+    </button>
+  </div>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+/* ============ CONFIG — edit tasks & rates here ============ */
+const CONFIG = {
+  rewardPerTask: 0.50,
+  minWithdraw: 10,
+  chainLabel: "BNB Chain (BEP20)",
+  tasks: [
+    { id:"t1", name:"BND DROP Official",   link:"https://t.me/bnddrop_demo1", members:"12.4K members", color:"#f5b942" },
+    { id:"t2", name:"Crypto Signals BD",   link:"https://t.me/bnddrop_demo2", members:"8.1K members",  color:"#4cc9f0" },
+    { id:"t3", name:"Earn Money BD",       link:"https://t.me/bnddrop_demo3", members:"21.7K members", color:"#2fd48c" },
+    { id:"t4", name:"Airdrop Hunters",     link:"https://t.me/bnddrop_demo4", members:"5.9K members",  color:"#ff8fa3" },
+    { id:"t5", name:"BD Freelancers Hub",  link:"https://t.me/bnddrop_demo5", members:"17.2K members", color:"#b388ff" },
+    { id:"t6", name:"Daily Deals BD",      link:"https://t.me/bnddrop_demo6", members:"9.6K members",  color:"#ffd166" }
+  ]
+};
+/* ========================================================== */
+
+const KEY = "bnddrop_v1";
+let S = JSON.parse(localStorage.getItem(KEY) || "null") ||
+        { balance:0, earned:0, done:{}, joined:{}, withdraws:[] };
+
+const $ = id => document.getElementById(id);
+const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+if (tg) { tg.ready(); tg.expand();
+  const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
+  if (u && u.first_name) $("hello").textContent = "Hi, " + u.first_name + " • Earn USDT";
+}
+
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+function fmt(n){ return n.toFixed(2); }
+
+function toast(msg, err){
+  const t = $("toast"); t.textContent = msg;
+  t.className = "show" + (err ? " err" : "");
+  setTimeout(()=> t.className = "", 2600);
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred(err ? "error" : "success");
+}
+
+function render(){
+  $("pillBal").textContent = fmt(S.balance);
+  $("heroBal").textContent = fmt(S.balance);
+  $("statEarned").textContent = fmt(S.earned);
+  $("statPer").textContent = CONFIG.rewardPerTask.toFixed(2);
+  const doneCount = Object.keys(S.done).length;
+  $("statDone").textContent = doneCount;
+
+  const list = $("taskList"); list.innerHTML = "";
+  CONFIG.tasks.forEach(tk => {
+    const done = !!S.done[tk.id], joined = !!S.joined[tk.id];
+    const div = document.createElement("div"); div.className = "task";
+    const initial = tk.name.trim().charAt(0).toUpperCase();
+    let btn;
+    if (done)        btn = `<button class="btn btn-done" disabled>Done ✓</button>`;
+    else if (joined) btn = `<button class="btn btn-claim" data-claim="${tk.id}">Claim $${CONFIG.rewardPerTask.toFixed(2)}</button>`;
+    else             btn = `<button class="btn btn-join" data-join="${tk.id}">Join</button>`;
+    div.innerHTML = `
+      <div class="ava" style="background:${tk.color}">${initial}</div>
+      <div class="info">
+        <div class="name">${tk.name}</div>
+        <div class="meta">Join channel • ${tk.members}</div>
+        <div class="reward">+$${CONFIG.rewardPerTask.toFixed(2)} USDT</div>
+      </div>${btn}`;
+    list.appendChild(div);
+  });
+
+  list.querySelectorAll("[data-join]").forEach(b => b.onclick = () => {
+    const tk = CONFIG.tasks.find(x => x.id === b.dataset.join);
+    S.joined[tk.id] = true; save();
+    if (tg) tg.openTelegramLink(tk.link); else window.open(tk.link, "_blank");
+    render();
+  });
+  list.querySelectorAll("[data-claim]").forEach(b => b.onclick = () => {
+    const id = b.dataset.claim;
+    b.innerHTML = `<span class="spin"></span> Checking…`; b.disabled = true;
+    setTimeout(() => {
+      S.done[id] = true;
+      S.balance += CONFIG.rewardPerTask;
+      S.earned  += CONFIG.rewardPerTask;
+      save(); render();
+      toast("+$" + CONFIG.rewardPerTask.toFixed(2) + " USDT added to your wallet");
+    }, 1500);
+  });
+
+  const wl = $("wdList");
+  if (!S.withdraws.length) wl.innerHTML = `<div class="empty">No withdraw requests yet.</div>`;
+  else wl.innerHTML = S.withdraws.map(w => `
+    <div class="wd-item">
+      <div><div class="a">$${fmt(w.amount)} USDT</div>
+      <div class="d">${w.address}<br>${w.date} • ${CONFIG.chainLabel}</div></div>
+      <span class="badge">${w.status}</span>
+    </div>`).join("");
+}
+
+$("wdBtn").onclick = () => {
+  const addr = $("wdAddr").value.trim();
+  const amt  = parseFloat($("wdAmt").value);
+  if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) return toast("Enter a valid BEP20 address (0x…)", true);
+  if (isNaN(amt) || amt < CONFIG.minWithdraw) return toast("Minimum withdraw is $" + CONFIG.minWithdraw.toFixed(2), true);
+  if (amt > S.balance) return toast("Insufficient balance", true);
+  S.balance -= amt;
+  S.withdraws.unshift({ amount:amt, address:addr, status:"Scheduled",
+    date:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) });
+  save(); render();
+  $("wdAddr").value = ""; $("wdAmt").value = "";
+  toast("Withdraw request scheduled: $" + fmt(amt) + " USDT");
+};
+
+$("resetBtn").onclick = () => {
+  if (confirm("Reset all demo data?")) { localStorage.removeItem(KEY); location.reload(); }
+};
+
+function go(page){
+  $("page-tasks").classList.toggle("on", page === "tasks");
+  $("page-wallet").classList.toggle("on", page === "wallet");
+  $("tabTasks").classList.toggle("on", page === "tasks");
+  $("tabWallet").classList.toggle("on", page === "wallet");
+  window.scrollTo(0,0);
+}
+$("tabTasks").onclick  = () => go("tasks");
+$("tabWallet").onclick = () => go("wallet");
+
+render();
+</script>
+</body>
+</html>
