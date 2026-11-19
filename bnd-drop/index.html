@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BND DROP — Complete Tasks, Earn USDT</title>
+<title>BNB USDT AIRDROP — Complete Tasks, Earn USDT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -144,7 +144,7 @@
         <svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M12 2.7C12 2.7 5.5 10.2 5.5 14.6C5.5 18.2 8.4 21.3 12 21.3C15.6 21.3 18.5 18.2 18.5 14.6C18.5 10.2 12 2.7 12 2.7Z" fill="#f5b942"/><path d="M9 14.8C9 16.9 10.3 18.6 12.1 19.1C10.9 17.4 10.3 15.6 10.3 13.5C10.3 12.4 10.5 11.3 10.9 10.2C9.8 11.5 9 13.1 9 14.8Z" fill="#ffdf9e"/></svg>
       </div>
       <div>
-        <h1>BND <span>DROP</span></h1>
+        <h1 style="font-size:16.5px">BNB USDT <span>AIRDROP</span></h1>
         <small id="hello">Complete tasks • Earn USDT</small>
       </div>
     </div>
@@ -192,7 +192,7 @@
     <h2 class="sec"><span class="sec-ic ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15.4c2 .6 3.4 2.1 4 4.6"/></svg></span> Refer &amp; Earn</h2>
     <div class="card">
       <h3>Invite friends, earn $0.30 each</h3>
-      <p>Share your referral link. Every friend who joins BND DROP through your link earns you <b style="color:var(--green)">+$0.30 USDT</b>.</p>
+      <p>Share your referral link. Every friend who joins BNB USDT AIRDROP through your link earns you <b style="color:var(--green)">+$0.30 USDT</b>.</p>
       <div class="ref-link" id="refLink">…</div>
       <div class="btnrow">
         <button class="btn btn-join" id="refCopyBtn">Copy Link</button>
@@ -250,7 +250,7 @@
 
     <div class="card">
       <h3>TON Wallet</h3>
-      <p>Connect your TON wallet (Tonkeeper, OpenMask, MyTonWallet &amp; more) to link it with your BND DROP account.</p>
+      <p>Connect your TON wallet (Tonkeeper, OpenMask, MyTonWallet &amp; more) to link it with your BNB USDT AIRDROP account.</p>
       <div id="tonConnectBtn"></div>
       <div class="ton-status" id="tonStatus">Not connected</div>
     </div>
@@ -307,7 +307,7 @@
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#23180a" stroke-width="2"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2.5" y="13" width="4.5" height="6.5" rx="2"/><rect x="17" y="13" width="4.5" height="6.5" rx="2"/></svg>
         </div>
         <div>
-          <h3 style="margin:0">BND DROP Support</h3>
+          <h3 style="margin:0">BNB USDT AIRDROP Support</h3>
           <div class="online"><span class="pulse"></span> Agent online — replies in a few minutes</div>
         </div>
       </div>
@@ -374,7 +374,7 @@ const CONFIG = {
   tonManifest: "https://hridoysoha.github.io/bnd-drop/tonconnect-manifest.json",
   supportTg: "Hridoysoha",
   tasks: [
-    { id:"t1", name:"BND DROP Official",   link:"https://t.me/bnddrop_demo1", members:"12.4K members", color:"#f5b942" },
+    { id:"t1", name:"BNB USDT AIRDROP Official",   link:"https://t.me/bnddrop_demo1", members:"12.4K members", color:"#f5b942" },
     { id:"t2", name:"Crypto Signals BD",   link:"https://t.me/bnddrop_demo2", members:"8.1K members",  color:"#4cc9f0" },
     { id:"t3", name:"Earn Money BD",       link:"https://t.me/bnddrop_demo3", members:"21.7K members", color:"#2fd48c" },
     { id:"t4", name:"Airdrop Hunters",     link:"https://t.me/bnddrop_demo4", members:"5.9K members",  color:"#ff8fa3" },
@@ -530,7 +530,7 @@ $("refCopyBtn").onclick = async () => {
 };
 $("refShareBtn").onclick = () => {
   const url = "https://t.me/share/url?url=" + encodeURIComponent(refLink) +
-              "&text=" + encodeURIComponent("Join BND DROP — complete tasks & mine USDT daily!");
+              "&text=" + encodeURIComponent("Join BNB USDT AIRDROP — complete tasks & mine USDT daily!");
   if (tg) tg.openTelegramLink(url); else window.open(url, "_blank");
 };
 
@@ -659,7 +659,7 @@ function agentReply(text){
   if (t.indexOf("mining") > -1 || t.indexOf("mine") > -1)
     return "Mining earns you $0.50 USDT per day. First complete the one-time Mining Verification (0.1 TON fee — paid only once), then tap Start Mining on the Home tab. One session runs 24 hours and you can claim your mined USDT anytime.";
   if (t.indexOf("refer") > -1 || t.indexOf("invite") > -1 || t.indexOf("friend") > -1)
-    return "You earn +$0.30 USDT for every friend who joins BND DROP through your referral link. Your link is on the Home tab, under Refer & Earn — just copy and share it.";
+    return "You earn +$0.30 USDT for every friend who joins BNB USDT AIRDROP through your referral link. Your link is on the Home tab, under Refer & Earn — just copy and share it.";
   if (t.indexOf("promot") > -1 || t.indexOf("member") > -1 || t.indexOf("channel") > -1)
     return "You can promote your channel from the Promote tab: $1 per 200 real members, paid in TON, with estimated delivery within 24 hours.";
   if (t.indexOf("ton") > -1 || t.indexOf("wallet") > -1 || t.indexOf("connect") > -1)
@@ -673,7 +673,7 @@ function agentReply(text){
 function renderSupport(){
   const box = $("chatBox");
   if (!S.supportMsgs.length) {
-    S.supportMsgs.push({ from:"agent", text:"Welcome to BND DROP Support! Ask me anything about tasks, mining, referrals, withdraw or channel promotion." });
+    S.supportMsgs.push({ from:"agent", text:"Welcome to BNB USDT AIRDROP Support! Ask me anything about tasks, mining, referrals, withdraw or channel promotion." });
     save();
   }
   box.innerHTML = S.supportMsgs.map(m => `<div class="msg ${m.from}">${m.text}</div>`).join("");
