@@ -372,13 +372,13 @@ function reply(s){
   if(has(s,['আসসালামু','সালাম','hello','hi','হ্যালো','হাই','নমস্কার']))return 'ওয়ালাইকুম আসসালাম! 😊 কী সাহায্য করতে পারি? স্বর্ণের রেট, ডিজাইন, অর্ডার — যা জানতে চান বলুন।';
   if(has(s,['মেরামত','সারানো','সারাতে','সারিয়ে','ঠিক কর','ভাঙা','ভেঙে','ভাঙ্গা','repair','ছিঁড়ে','ছিড়ে']))return 'গহনা মেরামতের জন্য আমাদের কল করুন (পেজের কল বাটনে চাপ দিন) অথবা সরাসরি শোরুমে আসুন। ঠিকানা: অক্সিজেন, মাজারগেট, ২নং ওয়ার্ড অফিস সংলগ্ন, বায়েজিদ, চট্টগ্রাম। দোকান খোলা: সকাল ১০টা — রাত ১০টা (শনিবার সাপ্তাহিক বন্ধ)।';
   if(has(s,['রেট','দাম','rate','dam','price','ভরি','গ্রাম','কত টাকা','আজকের']))return WARATE;
-  if(has(s,['ঠিকানা','address','কোথায়','কোথায়','kothay','location','দোকান']))return 'আমাদের দোকান: Modern Puja Jewellers, অক্সিজেন, মাজারগেট, ২নং ওয়ার্ড অফিস সংলগ্ন, বায়েজিদ, চট্টগ্রাম। পথ চিনতে সমস্যা হলে WhatsApp-এ মেসেজ করুন।';
+  if(has(s,['খোলা','খুলবে','সময়','সময়','কখন','open','বন্ধ','time']))return 'আমাদের দোকান প্রতিদিন সকাল ১০টা থেকে রাত ১০টা পর্যন্ত খোলা থাকে। শুধু শনিবার সাপ্তাহিক বন্ধ।';
+  if(has(s,['ঠিকানা','address','কোথায়','কোথায়','kothay','location']))return 'আমাদের দোকান: Modern Puja Jewellers, অক্সিজেন, মাজারগেট, ২নং ওয়ার্ড অফিস সংলগ্ন, বায়েজিদ, চট্টগ্রাম। পথ চিনতে সমস্যা হলে WhatsApp-এ মেসেজ করুন।';
   if(has(s,['অর্ডার','order','কিনতে','কিনব','বানাতে','বানিয়ে','booking','বুকিং']))return 'অর্ডার করা খুব সহজ: ১) ক্যাটালগ বা উপরের ডিজাইন সার্চ থেকে ডিজাইন পছন্দ করুন ২) স্ক্রিনশট নিয়ে WhatsApp-এ পাঠান ৩) আমরা ওজন ও দাম জানিয়ে দেবো। আমরা ২১K/২২K হলমার্ক ও KDM স্বর্ণে সব ধরনের অলংকারের অর্ডার নিই।';
   if(has(s,['হলমার্ক','hallmark','খাঁটি','বিশুদ্ধ','khati','ভেজাল','kdm','কেডিএম']))return 'হ্যাঁ, আমাদের সব গহনা ২১K/২২K হলমার্ক করা ও ১০০% খাঁটি — গ্যারান্টিসহ বিক্রি হয়। এছাড়া KDM স্বর্ণের অলংকারও পাওয়া যায় এবং অর্ডার নেওয়া হয়। নিশ্চিন্তে কিনতে পারেন। ✅';
   if(has(s,['এক্সচেঞ্জ','exchange','পুরাতন','পুরোনো','পুরানো','puraton','বিক্রি করতে','sell']))return 'হ্যাঁ, পুরাতন স্বর্ণ এক্সচেঞ্জ ও কেনা হয় — আজকের রেট অনুযায়ী সঠিক মূল্য দেওয়া হয়। স্বর্ণ নিয়ে দোকানে আসুন, অথবা WhatsApp-এ বিস্তারিত জেনে নিন।';
   if(has(s,['মজুরি','making','চার্জ','charge','মেকিং']))return 'মেকিং চার্জ ডিজাইন ও কাজের ওপর নির্ভর করে। নির্দিষ্ট ডিজাইনের স্ক্রিনশট WhatsApp-এ পাঠালে আমরা সঠিক হিসাব জানিয়ে দেবো।';
   if(has(s,['ডেলিভারি','delivery','কুরিয়ার','courier','পাঠাতে','পাঠানো']))return 'ডেলিভারি সম্পর্কে বিস্তারিত জানতে WhatsApp-এ মেসেজ করুন — আমরা সব জানিয়ে দেবো।';
-  if(has(s,['খোলা','খুলবে','সময়','সময়','কখন','open','বন্ধ','time']))return 'আমাদের দোকান প্রতিদিন সকাল ১০টা থেকে রাত ১০টা পর্যন্ত খোলা থাকে। শুধু শনিবার সাপ্তাহিক বন্ধ।';
   if(has(s,['ডিজাইন','design','ক্যাটালগ','catalog','ছবি','কালেকশন']))return 'আমাদের ক্যাটালগে ব্রাইডাল সেট, নেকলেস, ঝুমকা, চুড়ি, আংটি, পেন্ডেন্ট, নাকফুল, পায়েল, চেইন — সব ডিজাইন আছে। আরও হাজার ডিজাইন দেখতে উপরের গ্যালারির Google বাটনে HD ডিজাইন খুঁজুন — শুধু গহনার ডিজাইনই আসবে।';
   if(has(s,['যোগাযোগ','contact','নম্বর','number','ফোন','phone','whatsapp','হোয়াটসঅ্যাপ']))return 'যোগাযোগের সবচেয়ে সহজ উপায়: এই পেজের সবুজ WhatsApp বাটনে ক্লিক করুন — সরাসরি আমাদের সাথে চ্যাট শুরু হবে।';
   if(has(s,['ধন্যবাদ','thanks','thank','শুকরিয়া']))return 'আপনাকেও ধন্যবাদ! 😊 আরও কিছু জানার থাকলে বলুন, অথবা দোকানে এসে ঘুরে যান।';
@@ -391,7 +391,11 @@ function reply(s){
 
 <script>
 (function(){
- var P=['https://api.allorigins.win/raw?url=','https://corsproxy.io/?url='];
+ var MODES=[
+  {u:'https://api.allorigins.win/raw?url=', j:false},
+  {u:'https://api.allorigins.win/get?url=', j:true},
+  {u:'https://corsproxy.io/?url=', j:false}
+ ];
  var U='https://www.goldr.org/';
  function set(id,v){var e=document.getElementById(id);if(e&&v)e.textContent='\u09F3'+v}
  function en(v){return v.replace(/[\u09E6-\u09EF]/g,function(d){return '\u09E6\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF'.indexOf(d)}).replace(/,/g,'')}
@@ -404,19 +408,18 @@ function reply(s){
    for(var i=1;i<c.length;i++){var m=c[i].textContent.match(/\u09F3\s*[\u09E6-\u09EF,]+/);if(m){price=m[0].replace(/\u09F3|\s/g,'');break}}
    if(!price)return;(B[lab]=B[lab]||[]).push(price);
   });
-  function g(l,i){return (B[l]||[])[i]}
-  var need=[['rg22',g('22 Karat Gold',0)],['rv22',g('22 Karat Gold',1)],['rg21',g('21 Karat Gold',0)],['rv21',g('21 Karat Gold',1)],['rg18',g('18 Karat Gold',0)],['rv18',g('18 Karat Gold',1)],['rgT',g('Traditional',0)],['rvT',g('Traditional',2)],['rs22',g('22 Karat Silver',0)],['rs21',g('21 Karat Silver',0)],['rs18',g('18 Karat Silver',0)],['rsT',g('Traditional',1)]];
+  function pick(lab,lo,hi){var a=B[lab]||[];for(var i=0;i<a.length;i++){var n=parseInt(en(a[i]),10);if(n>=lo&&n<=hi)return a[i]}return null}
+  var need=[['rg22',pick('22 Karat Gold',10000,30000)],['rv22',pick('22 Karat Gold',150000,350000)],['rg21',pick('21 Karat Gold',10000,30000)],['rv21',pick('21 Karat Gold',150000,350000)],['rg18',pick('18 Karat Gold',8000,25000)],['rv18',pick('18 Karat Gold',100000,300000)],['rgT',pick('Traditional',8000,20000)],['rvT',pick('Traditional',100000,200000)],['rs22',pick('22 Karat Silver',100,600)],['rs21',pick('21 Karat Silver',100,600)],['rs18',pick('18 Karat Silver',80,500)],['rsT',pick('Traditional',100,400)]];
   for(var k=0;k<need.length;k++){if(!need[k][1])return false}
-  var chk=parseInt(en(need[0][1]),10);if(!(chk>10000&&chk<30000))return false;
   need.forEach(function(p){set(p[0],p[1])});
   var el=document.getElementById('rateLive');
   if(el){var s=new Date().toLocaleString('bn-BD',{timeZone:'Asia/Dhaka',weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});el.textContent='\uD83D\uDFE2 LIVE \u09B0\u09C7\u099F \u2014 \u09B8\u09B0\u09CD\u09AC\u09B6\u09C7\u09B7 \u0986\u09AA\u09A1\u09C7\u099F: '+s+' (\u09A2\u09BE\u0995\u09BE \u09B8\u09AE\u09DF)'}
   return true;
  }
  function attempt(i){
-  if(i>=P.length)return;
-  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},12000);
-  fetch(P[i]+encodeURIComponent(U),{signal:ctl.signal}).then(function(r){return r.text()}).then(function(t){clearTimeout(to);if(!parse(t))attempt(i+1)}).catch(function(){clearTimeout(to);attempt(i+1)});
+  if(i>=MODES.length){var el=document.getElementById('rateLive');if(el)el.textContent='\u0986\u09AA\u09A1\u09C7\u099F: \u09E7\u09EF \u09A8\u09AD\u09C7\u09AE\u09CD\u09AC\u09B0 \u09E8\u09E6\u09E8\u09EC';return}
+  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},25000);
+  fetch(MODES[i].u+encodeURIComponent(U),{signal:ctl.signal}).then(function(r){return r.text()}).then(function(t){clearTimeout(to);if(MODES[i].j){try{t=JSON.parse(t).contents}catch(e){t=''}}if(!t||!parse(t))attempt(i+1)}).catch(function(){clearTimeout(to);attempt(i+1)});
  }
  attempt(0);
 })();
