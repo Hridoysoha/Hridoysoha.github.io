@@ -104,6 +104,21 @@
   .reset{background:none;border:none;color:var(--muted);font-size:12px;text-decoration:underline;cursor:pointer;display:block;margin:18px auto 0;font-family:inherit}
   #tonConnectBtn{display:flex;justify-content:center;margin-top:13px;min-height:44px}
   .ton-status{text-align:center;color:var(--muted);font-size:12px;margin-top:9px;word-break:break-all}
+  /* Support chat */
+  .agent-head{display:flex;align-items:center;gap:12px}
+  .agent-ava{width:50px;height:50px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(245,185,66,.35)}
+  .online{color:var(--green);font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px;margin-top:2px}
+  .chat-box{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:16px;padding:13px;height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;margin-top:13px}
+  .msg{max-width:82%;padding:10px 13px;border-radius:15px;font-size:13.5px;line-height:1.5;word-wrap:break-word}
+  .msg.agent{background:var(--card2);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:5px}
+  .msg.me{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#23180a;align-self:flex-end;border-bottom-right-radius:5px;font-weight:500}
+  .msg.typing{color:var(--muted);font-style:italic}
+  .topics{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+  .topic{background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--text);font-size:12px;padding:7px 12px;border-radius:999px;cursor:pointer;font-family:inherit}
+  .topic:active{transform:scale(.95)}
+  .chat-row{display:flex;gap:8px;margin-top:12px}
+  .chat-row input{flex:1}
+  .chat-row .btn{padding:13px 18px}
   /* Floating nav */
   nav{position:fixed;left:12px;right:12px;bottom:12px;z-index:5;max-width:456px;margin:0 auto;background:rgba(13,17,32,.88);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(14px);box-shadow:0 16px 38px rgba(0,0,0,.55)}
   nav .in{display:flex;padding:7px}
@@ -257,6 +272,40 @@
 
     <button class="reset" id="resetBtn">Reset demo data</button>
   </section>
+
+  <!-- SUPPORT PAGE -->
+  <section id="page-support" class="page">
+    <h2 class="sec" style="margin-top:6px"><span class="sec-ic ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2.5" y="13" width="4.5" height="6.5" rx="2"/><rect x="17" y="13" width="4.5" height="6.5" rx="2"/><path d="M20 19.5c0 1.7-1.6 2.5-4 2.5"/></svg></span> Live Support</h2>
+    <p class="sec-note">Questions about tasks, mining, withdraw or promotion? Our support agent is here to help.</p>
+
+    <div class="card">
+      <div class="agent-head">
+        <div class="agent-ava">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#23180a" stroke-width="2"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2.5" y="13" width="4.5" height="6.5" rx="2"/><rect x="17" y="13" width="4.5" height="6.5" rx="2"/></svg>
+        </div>
+        <div>
+          <h3 style="margin:0">BND DROP Support</h3>
+          <div class="online"><span class="pulse"></span> Agent online — replies in a few minutes</div>
+        </div>
+      </div>
+
+      <div class="chat-box" id="chatBox"></div>
+
+      <div class="topics">
+        <button class="topic" data-topic="How do I withdraw my USDT?">Withdraw help</button>
+        <button class="topic" data-topic="How does mining work?">Mining</button>
+        <button class="topic" data-topic="How does referral work?">Referral</button>
+        <button class="topic" data-topic="How can I promote my channel?">Promote channel</button>
+      </div>
+
+      <div class="chat-row">
+        <input id="chatInput" type="text" placeholder="Type your message…" autocomplete="off">
+        <button class="btn btn-join" id="chatSend">Send</button>
+      </div>
+
+      <button class="btn btn-wide" id="supportTgBtn" style="background:linear-gradient(135deg,#55c8f5,#229ed9);color:#062a3d;box-shadow:0 8px 20px rgba(34,158,217,.3)">Chat with Agent on Telegram</button>
+    </div>
+  </section>
 </div>
 
 <nav>
@@ -272,6 +321,10 @@
     <button id="tabWallet">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/></svg>
       Wallet
+    </button>
+    <button id="tabSupport">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2.5" y="13" width="4.5" height="6.5" rx="2"/><rect x="17" y="13" width="4.5" height="6.5" rx="2"/><path d="M20 19.5c0 1.7-1.6 2.5-4 2.5"/></svg>
+      Support
     </button>
   </div>
 </nav>
@@ -290,6 +343,7 @@ const CONFIG = {
   promotePer200: 1,
   chainLabel: "BNB Chain (BEP20)",
   tonManifest: "https://hridoysoha.github.io/bnd-drop/tonconnect-manifest.json",
+  supportTg: "Hridoysoha",
   tasks: [
     { id:"t1", name:"BND DROP Official",   link:"https://t.me/bnddrop_demo1", members:"12.4K members", color:"#f5b942" },
     { id:"t2", name:"Crypto Signals BD",   link:"https://t.me/bnddrop_demo2", members:"8.1K members",  color:"#4cc9f0" },
@@ -309,6 +363,7 @@ let S = JSON.parse(localStorage.getItem(KEY) || "null") || {
 };
 if (!S.orders) S.orders = [];
 if (!S.mining) S.mining = { start:null, banked:0 };
+if (!S.supportMsgs) S.supportMsgs = [];
 
 const $ = id => document.getElementById(id);
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -510,21 +565,74 @@ $("promoBtn").onclick = () => {
   toast("Order placed! Delivery within ~24 hours");
 };
 
+/* ---------- Live Support ---------- */
+function agentReply(text){
+  const t = text.toLowerCase();
+  if (t.indexOf("withdraw") > -1 || t.indexOf("payout") > -1 || t.indexOf("cash") > -1)
+    return "To withdraw: open the Wallet tab, enter your BEP20 (BNB Chain) address and an amount of at least $10, then tap Request Withdraw. Requests are processed on schedule after review.";
+  if (t.indexOf("mining") > -1 || t.indexOf("mine") > -1)
+    return "Mining earns you $0.50 USDT per day. Tap Start Mining on the Home tab — one session runs 24 hours and you can claim your mined USDT to your balance anytime.";
+  if (t.indexOf("refer") > -1 || t.indexOf("invite") > -1 || t.indexOf("friend") > -1)
+    return "You earn +$0.30 USDT for every friend who joins BND DROP through your referral link. Your link is on the Home tab, under Refer & Earn — just copy and share it.";
+  if (t.indexOf("promot") > -1 || t.indexOf("member") > -1 || t.indexOf("channel") > -1)
+    return "You can promote your channel from the Promote tab: $1 per 200 real members, paid in TON, with estimated delivery within 24 hours.";
+  if (t.indexOf("ton") > -1 || t.indexOf("wallet") > -1 || t.indexOf("connect") > -1)
+    return "Open the Wallet tab and tap the TON Connect button to link Tonkeeper, OpenMask or another TON wallet with your account.";
+  if (t.indexOf("task") > -1 || t.indexOf("join") > -1)
+    return "For tasks: tap Join on a task, join the channel, come back and tap Claim — $0.50 USDT is added to your balance right away.";
+  if (t.indexOf("hi") > -1 || t.indexOf("hello") > -1 || t.indexOf("salam") > -1)
+    return "Hello! How can I help you today — tasks, mining, withdraw, referral or promotion?";
+  return "Thanks for your message! A support agent has received it and will reply here shortly. For anything urgent, tap 'Chat with Agent on Telegram' below.";
+}
+function renderSupport(){
+  const box = $("chatBox");
+  if (!S.supportMsgs.length) {
+    S.supportMsgs.push({ from:"agent", text:"Welcome to BND DROP Support! Ask me anything about tasks, mining, referrals, withdraw or channel promotion." });
+    save();
+  }
+  box.innerHTML = S.supportMsgs.map(m => `<div class="msg ${m.from}">${m.text}</div>`).join("");
+  box.scrollTop = box.scrollHeight;
+}
+function sendSupport(text){
+  const msg = (text || $("chatInput").value).trim();
+  if (!msg) return;
+  S.supportMsgs.push({ from:"me", text:msg.replace(/</g,"&lt;") }); save(); renderSupport();
+  $("chatInput").value = "";
+  const box = $("chatBox");
+  const ty = document.createElement("div");
+  ty.className = "msg agent typing"; ty.textContent = "Agent is typing…";
+  box.appendChild(ty); box.scrollTop = box.scrollHeight;
+  setTimeout(() => {
+    S.supportMsgs.push({ from:"agent", text:agentReply(msg) });
+    save(); renderSupport();
+  }, 1100);
+}
+$("chatSend").onclick = () => sendSupport();
+$("chatInput").addEventListener("keydown", e => { if (e.key === "Enter") sendSupport(); });
+document.querySelectorAll("[data-topic]").forEach(b => b.onclick = () => sendSupport(b.dataset.topic));
+$("supportTgBtn").onclick = () => {
+  const url = "https://t.me/" + CONFIG.supportTg;
+  if (tg) tg.openTelegramLink(url); else window.open(url, "_blank");
+};
+
 /* ---------- Tabs ---------- */
 function go(page){
   $("page-tasks").classList.toggle("on", page === "tasks");
   $("page-promote").classList.toggle("on", page === "promote");
   $("page-wallet").classList.toggle("on", page === "wallet");
+  $("page-support").classList.toggle("on", page === "support");
   $("tabTasks").classList.toggle("on", page === "tasks");
   $("tabPromote").classList.toggle("on", page === "promote");
   $("tabWallet").classList.toggle("on", page === "wallet");
+  $("tabSupport").classList.toggle("on", page === "support");
   window.scrollTo(0,0);
 }
 $("tabTasks").onclick   = () => go("tasks");
 $("tabPromote").onclick = () => go("promote");
 $("tabWallet").onclick  = () => go("wallet");
+$("tabSupport").onclick = () => { go("support"); renderSupport(); };
 
-save(); render(); renderMining(); renderOrders();
+save(); render(); renderMining(); renderOrders(); renderSupport();
 </script>
 </body>
 </html>
