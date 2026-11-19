@@ -368,7 +368,7 @@ const CONFIG = {
   humanVerifyTonUsd: 0.10,
   miningFeeTon: 0.1,
   tonUsdRate: 5.5,
-  feeTonAddress: "",
+  feeTonAddress: "UQAWSju1VBVlppO2wwEoU66UTaGAzD69v3RXwTTjkMyWu0Ql",
   promotePer200: 1,
   chainLabel: "BNB Chain (BEP20)",
   tonManifest: "https://hridoysoha.github.io/bnd-drop/tonconnect-manifest.json",
@@ -592,8 +592,8 @@ $("resetBtn").onclick = () => {
 
 /* ---------- TON payments (verification fees) ---------- */
 async function payTon(nanoTon, label){
-  /* Real payment when a receiving address is configured and a TON wallet is connected */
-  if (CONFIG.feeTonAddress && window.tonUI && window.tonUI.wallet) {
+  /* All TON payments go to the owner's TON address (CONFIG.feeTonAddress) */
+  if (window.tonUI && window.tonUI.wallet) {
     try {
       await window.tonUI.sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 300,
@@ -602,8 +602,8 @@ async function payTon(nanoTon, label){
       return true;
     } catch(e) { toast("TON payment cancelled or failed", true); return false; }
   }
-  /* Demo mode: no receiving address configured yet */
-  return confirm(label + "\n\nDemo mode: simulate this TON payment now?");
+  toast("Connect your TON wallet first — Wallet tab", true);
+  return false;
 }
 $("mineVerifyBtn").onclick = async () => {
   const ok = await payTon(Math.round(CONFIG.miningFeeTon * 1e9),
@@ -635,16 +635,20 @@ function renderOrders(){
     </div>`).join("");
 }
 $("promoMembers").onchange = renderOrders;
-$("promoBtn").onclick = () => {
+$("promoBtn").onclick = async () => {
   const link = $("promoLink").value.trim();
   if (!/^(https:\/\/)?t\.me\/[A-Za-z0-9_]{3,}$/.test(link) && !/^@[A-Za-z0-9_]{3,}$/.test(link))
     return toast("Enter a valid channel link or @username", true);
   const members = parseInt($("promoMembers").value, 10);
-  S.orders.unshift({ channel:link, members:members, price:promoPrice(), status:"In Progress",
+  const price = promoPrice();
+  const nano = Math.round(price / CONFIG.tonUsdRate * 1e9);
+  const ok = await payTon(nano, "Channel Promotion — " + members + " members, $" + price.toFixed(2) + " in TON");
+  if (!ok) return;
+  S.orders.unshift({ channel:link, members:members, price:price, status:"In Progress",
     date:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) });
   save(); renderOrders();
   $("promoLink").value = "";
-  toast("Order placed! Delivery within ~24 hours");
+  toast("Payment sent! Promotion order placed — delivery within ~24 hours");
 };
 
 /* ---------- Live Support ---------- */
