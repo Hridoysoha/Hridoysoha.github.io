@@ -173,7 +173,7 @@ section{animation:fadeUp .7s ease both}
       <p class="sec-sub">নমুনা ডিজাইন গ্যালারি — শুধুমাত্র গহনার ডিজাইন, সম্পূর্ণ পরিবার-বান্ধব। পছন্দ হলে WhatsApp-এ পাঠান, হুবহু বানিয়ে দেবো</p>
       <div class="searchbar">
         <input id="pq" type="text" placeholder="ডিজাইনের নাম লিখুন — যেমন: bridal necklace, jhumka, churi...">
-        <button class="btn" onclick="ovText()">সার্চ করুন</button>
+        <button class="btn" onclick="ovText()">সার্চ করুন</button> <button onclick="gSearch()" style="background:#4285F4;color:#fff;border:none;padding:12px 20px;border-radius:10px;font-weight:700;cursor:pointer;font-size:15px">📷 Google-এ HD ডিজাইন খুঁজুন</button>
       </div>
       <button class="ask-ai" onclick="toggleChat(true)">💬 প্রশ্ন আছে? MPJ সহায়ককে জিজ্ঞেস করুন — সাথে সাথে উত্তর</button>
       <div class="chips">
@@ -348,6 +348,7 @@ function renderDesigns(list,label){
 function ovShow(cat){renderDesigns(DESIGNS.filter(function(d){return d.c===cat}),CATNAMES[cat])}
 function ovText(){var q=document.getElementById('pq').value.trim().toLowerCase();if(!q){renderDesigns(DESIGNS,'সব ডিজাইন');return}renderDesigns(DESIGNS.filter(function(d){return (d.t+' '+d.kw).toLowerCase().indexOf(q)>-1}),'সার্চ')}
 document.getElementById('pq').addEventListener('keydown',function(e){if(e.key==='Enter')ovText()});
+function gSearch(){var q=document.getElementById('pq').value.trim();window.open('https://www.google.com/search?tbm=isch&q='+encodeURIComponent((q?q+' ':'')+'gold jewellery design HD'),'_blank')}
 renderDesigns(DESIGNS,'সব ডিজাইন');
 var curF='all';
 document.querySelectorAll('#catfilter button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#catfilter button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');curF=b.getAttribute('data-f');cfilter()}});
