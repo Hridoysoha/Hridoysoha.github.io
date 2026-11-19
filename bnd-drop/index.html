@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BND DROP — Complete Tasks, Earn USDT</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 <style>
   :root{
     --bg:#0b0e17; --card:#151a2b; --card2:#1b2140; --line:#262d4d;
     --text:#f2f4ff; --muted:#9aa3c7; --gold:#f5b942; --gold2:#ffcf6b;
-    --green:#2fd48c; --red:#ff6b6b; --radius:18px;
+    --green:#2fd48c; --red:#ff6b6b; --blue:#4cc9f0; --radius:18px;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;min-height:100vh}
   .wrap{max-width:480px;margin:0 auto;padding:16px 14px 110px}
-  /* Header */
   header{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 14px}
   .brand{display:flex;align-items:center;gap:10px}
   .logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#2a2110,#171106);border:1px solid #4a3a14;display:flex;align-items:center;justify-content:center}
@@ -23,7 +23,6 @@
   .brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.4px}
   .bal-pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:700;font-size:14px;color:var(--gold2)}
   .bal-pill small{color:var(--muted);font-weight:600;font-size:10px;display:block;text-align:right;letter-spacing:.5px}
-  /* Hero */
   .hero{background:linear-gradient(135deg,#3a2a08,#171106 55%,#101728);border:1px solid #4a3a14;border-radius:22px;padding:20px;position:relative;overflow:hidden}
   .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(245,185,66,.35),transparent 70%)}
   .hero .lbl{color:var(--muted);font-size:12px;letter-spacing:1.2px;text-transform:uppercase}
@@ -34,10 +33,24 @@
   .stat{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 12px}
   .stat b{font-size:16px}
   .stat small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
-  /* Section */
   h2.sec{font-size:16px;margin:22px 2px 6px;display:flex;align-items:center;gap:8px}
   .sec-note{color:var(--muted);font-size:12.5px;margin:0 2px 12px;line-height:1.5}
-  /* Task card */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+  .card h3{font-size:15px;margin-bottom:4px}
+  .card p{color:var(--muted);font-size:12.5px;line-height:1.55}
+  /* Mining */
+  .mine-amt{font-size:30px;font-weight:800;color:var(--green);margin:8px 0 2px;font-variant-numeric:tabular-nums}
+  .mine-amt span{font-size:14px;color:var(--muted);font-weight:700}
+  .bar{height:9px;background:#0e1222;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:10px 0 6px}
+  .bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#1d9e68,var(--green));border-radius:99px;transition:width .6s}
+  .mine-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:11.5px}
+  .btnrow{display:flex;gap:9px;margin-top:13px}
+  .btnrow .btn{flex:1}
+  /* Referral */
+  .ref-link{background:#0e1222;border:1px dashed #3d4a7a;border-radius:12px;padding:12px;font-size:12.5px;word-break:break-all;color:var(--blue);margin-top:10px}
+  .ref-stats{display:flex;gap:10px;margin-top:12px}
+  .ref-stats .stat{background:var(--card2);border:1px solid var(--line)}
+  /* Tasks */
   .task{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:10px}
   .ava{width:50px;height:50px;border-radius:15px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#0b0e17}
   .task .info{flex:1;min-width:0}
@@ -48,15 +61,13 @@
   .btn:active{transform:scale(.96)}
   .btn-join{background:var(--gold);color:#23180a}
   .btn-claim{background:var(--green);color:#06281a}
+  .btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--line)}
   .btn-done{background:var(--card2);color:var(--muted);cursor:default}
-  .btn[disabled]{opacity:.75;cursor:default}
+  .btn[disabled]{opacity:.7;cursor:default}
   /* Wallet */
-  .wcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-  .wcard h3{font-size:14px;margin-bottom:4px}
-  .wcard p{color:var(--muted);font-size:12.5px;line-height:1.55}
   label{display:block;font-size:12px;color:var(--muted);margin:13px 0 6px;letter-spacing:.4px}
-  input{width:100%;background:#0e1222;border:1px solid var(--line);border-radius:12px;padding:13px;color:var(--text);font-size:14px;outline:none}
-  input:focus{border-color:var(--gold)}
+  input,select{width:100%;background:#0e1222;border:1px solid var(--line);border-radius:12px;padding:13px;color:var(--text);font-size:14px;outline:none}
+  input:focus,select:focus{border-color:var(--gold)}
   .btn-wide{width:100%;background:var(--gold);color:#23180a;padding:14px;font-size:15px;margin-top:16px;border-radius:13px}
   .chiprow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .chip{background:var(--card2);border:1px solid var(--line);color:var(--muted);font-size:11.5px;padding:6px 10px;border-radius:999px}
@@ -68,6 +79,8 @@
   .badge{background:#3a2f10;color:var(--gold2);border:1px solid #6b5518;font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;white-space:nowrap}
   .empty{color:var(--muted);font-size:13px;text-align:center;padding:14px 0}
   .reset{background:none;border:none;color:var(--muted);font-size:12px;text-decoration:underline;cursor:pointer;display:block;margin:18px auto 0}
+  #tonConnectBtn{display:flex;justify-content:center;margin-top:12px;min-height:44px}
+  .ton-status{text-align:center;color:var(--muted);font-size:12px;margin-top:8px;word-break:break-all}
   /* Tabs */
   nav{position:fixed;left:0;right:0;bottom:0;background:rgba(13,16,28,.96);border-top:1px solid var(--line);backdrop-filter:blur(8px);z-index:5}
   nav .in{max-width:480px;margin:0 auto;display:flex}
@@ -75,12 +88,13 @@
   nav button.on{color:var(--gold)}
   nav svg{width:22px;height:22px}
   .page{display:none}.page.on{display:block}
-  /* Toast */
   #toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#1e2b1e;border:1px solid var(--green);padding:12px 18px;border-radius:13px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:9;max-width:90vw;text-align:center;color:#d9ffef}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   #toast.err{border-color:var(--red);color:#ffd9d9;background:#2b1e1e}
   .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.25);border-top-color:#06281a;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
   @keyframes sp{to{transform:rotate(360deg)}}
+  .pulse{width:9px;height:9px;border-radius:50%;background:var(--green);display:inline-block;animation:pl 1.4s infinite}
+  @keyframes pl{0%{box-shadow:0 0 0 0 rgba(47,212,140,.5)}70%{box-shadow:0 0 0 7px rgba(47,212,140,0)}100%{box-shadow:0 0 0 0 rgba(47,212,140,0)}}
 </style>
 </head>
 <body>
@@ -98,30 +112,99 @@
     <div class="bal-pill"><small>BALANCE</small>$<span id="pillBal">0.00</span></div>
   </header>
 
-  <!-- TASKS PAGE -->
+  <!-- HOME PAGE -->
   <section id="page-tasks" class="page on">
     <div class="hero">
       <div class="lbl">Total Balance</div>
       <div class="amt">$<span id="heroBal">0.00</span> <span>USDT</span></div>
-      <div class="sub">Join channels, complete tasks, stack your drops.</div>
+      <div class="sub">Join channels, mine daily, invite friends — stack your drops.</div>
       <div class="row">
-        <div class="stat"><b id="statDone">0</b><small>Tasks completed</small></div>
+        <div class="stat"><b id="statDone">0</b><small>Tasks done</small></div>
+        <div class="stat"><b id="statRefs">0</b><small>Referrals</small></div>
         <div class="stat"><b>$<span id="statEarned">0.00</span></b><small>Total earned</small></div>
-        <div class="stat"><b>$<span id="statPer">0.50</span></b><small>Per task</small></div>
       </div>
     </div>
 
-    <h2 class="sec">Today's Tasks</h2>
+    <h2 class="sec">⛏ Mining</h2>
+    <div class="card">
+      <h3 id="mineTitle">USDT Miner</h3>
+      <p>Start mining and earn <b style="color:var(--green)">$0.50 USDT per day</b>, automatically. One session runs 24 hours — claim anytime.</p>
+      <div class="mine-amt">$<span id="mineAmt">0.000000</span> <span>USDT mined</span></div>
+      <div class="bar"><i id="mineBar"></i></div>
+      <div class="mine-meta"><span id="mineState">Not started</span><span>Rate: $0.50 / day</span></div>
+      <div class="btnrow">
+        <button class="btn btn-join" id="mineStartBtn">Start Mining</button>
+        <button class="btn btn-claim" id="mineClaimBtn" disabled>Claim</button>
+      </div>
+    </div>
+
+    <h2 class="sec">👥 Refer &amp; Earn</h2>
+    <div class="card">
+      <h3>Invite friends, earn $0.30 each</h3>
+      <p>Share your referral link. Every friend who joins BND DROP through your link earns you <b style="color:var(--green)">+$0.30 USDT</b>.</p>
+      <div class="ref-link" id="refLink">…</div>
+      <div class="btnrow">
+        <button class="btn btn-join" id="refCopyBtn">Copy Link</button>
+        <button class="btn btn-ghost" id="refShareBtn">Share</button>
+      </div>
+      <div class="ref-stats">
+        <div class="stat"><b id="refCount">0</b><small>Friends joined</small></div>
+        <div class="stat"><b>$<span id="refEarned">0.00</span></b><small>Referral earnings</small></div>
+      </div>
+    </div>
+
+    <h2 class="sec">⚡ Today's Tasks</h2>
     <p class="sec-note">Tap <b style="color:var(--gold2)">Join</b>, join the channel, come back and tap <b style="color:var(--green)">Claim</b> — $0.50 USDT lands in your wallet instantly.</p>
     <div id="taskList"></div>
+  </section>
+
+  <!-- PROMOTE PAGE -->
+  <section id="page-promote" class="page">
+    <h2 class="sec" style="margin-top:6px">Promote Your Channel</h2>
+    <p class="sec-note">Get <b style="color:var(--text)">real members</b> for your Telegram channel. Pay with TON — delivery starts fast, estimated completion within <b style="color:var(--text)">24 hours</b>.</p>
+
+    <div class="card">
+      <h3>New Promotion Order</h3>
+      <p>Rate: <b style="color:var(--gold2)">$1 per 200 members</b> • Real members • Estimated delivery: <b style="color:var(--gold2)">24H</b> • Payment: <b style="color:var(--gold2)">TON</b></p>
+      <label>YOUR CHANNEL LINK</label>
+      <input id="promoLink" type="text" placeholder="https://t.me/yourchannel or @yourchannel" autocomplete="off" spellcheck="false">
+      <label>MEMBERS PACKAGE</label>
+      <select id="promoMembers">
+        <option value="200">200 members — $1</option>
+        <option value="400">400 members — $2</option>
+        <option value="600">600 members — $3</option>
+        <option value="800">800 members — $4</option>
+        <option value="1000">1,000 members — $5</option>
+        <option value="2000">2,000 members — $10</option>
+        <option value="5000">5,000 members — $25</option>
+      </select>
+      <div class="chiprow">
+        <span class="chip">Total: <b id="promoTotal">$1.00 TON</b></span>
+        <span class="chip">Delivery: <b>~24H</b></span>
+        <span class="chip">Members: <b>Real</b></span>
+      </div>
+      <button class="btn btn-wide" id="promoBtn">Pay with TON &amp; Start Promotion</button>
+    </div>
+
+    <div class="card">
+      <h3>My Promotion Orders</h3>
+      <div id="orderList"><div class="empty">No promotion orders yet.</div></div>
+    </div>
   </section>
 
   <!-- WALLET PAGE -->
   <section id="page-wallet" class="page">
     <h2 class="sec" style="margin-top:6px">My Wallet</h2>
-    <p class="sec-note">Your earned USDT (demo) is stored here. Withdraw to your own wallet on the BNB Chain.</p>
+    <p class="sec-note">Connect your TON wallet, and withdraw your USDT on the BNB Chain.</p>
 
-    <div class="wcard">
+    <div class="card">
+      <h3>TON Wallet</h3>
+      <p>Connect your TON wallet (Tonkeeper, OpenMask, MyTonWallet &amp; more) to link it with your BND DROP account.</p>
+      <div id="tonConnectBtn"></div>
+      <div class="ton-status" id="tonStatus">Not connected</div>
+    </div>
+
+    <div class="card">
       <h3>Withdraw USDT</h3>
       <p>Minimum withdraw <b style="color:var(--gold2)">$10.00</b> • Network: <b style="color:var(--gold2)">BNB Chain (BEP20) only</b>. Requests are processed on schedule after review.</p>
       <label>WALLET ADDRESS (BEP20)</label>
@@ -136,7 +219,7 @@
       </div>
     </div>
 
-    <div class="wcard">
+    <div class="card">
       <h3>Withdraw History</h3>
       <div id="wdList"><div class="empty">No withdraw requests yet.</div></div>
     </div>
@@ -149,7 +232,11 @@
   <div class="in">
     <button id="tabTasks" class="on">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" stroke-linejoin="round"/></svg>
-      Tasks
+      Home
+    </button>
+    <button id="tabPromote">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l14-6v14L3 13v-2z" stroke-linejoin="round"/><path d="M7 13v5a2 2 0 0 0 4 0v-4M17 8a4 4 0 0 1 0 8"/></svg>
+      Promote
     </button>
     <button id="tabWallet">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/></svg>
@@ -161,11 +248,17 @@
 <div id="toast"></div>
 
 <script>
-/* ============ CONFIG — edit tasks & rates here ============ */
+/* ============ CONFIG — edit tasks, rates & bot here ============ */
 const CONFIG = {
+  botUsername: "BNDdropBot",        // set after BotFather creates the bot
+  appShortName: "app",              // Mini App short name in BotFather
   rewardPerTask: 0.50,
+  referralReward: 0.30,
+  miningPerDay: 0.50,
   minWithdraw: 10,
+  promotePer200: 1,
   chainLabel: "BNB Chain (BEP20)",
+  tonManifest: "https://hridoysoha.github.io/bnd-drop/tonconnect-manifest.json",
   tasks: [
     { id:"t1", name:"BND DROP Official",   link:"https://t.me/bnddrop_demo1", members:"12.4K members", color:"#f5b942" },
     { id:"t2", name:"Crypto Signals BD",   link:"https://t.me/bnddrop_demo2", members:"8.1K members",  color:"#4cc9f0" },
@@ -175,48 +268,106 @@ const CONFIG = {
     { id:"t6", name:"Daily Deals BD",      link:"https://t.me/bnddrop_demo6", members:"9.6K members",  color:"#ffd166" }
   ]
 };
-/* ========================================================== */
+/* ================================================================ */
 
-const KEY = "bnddrop_v1";
-let S = JSON.parse(localStorage.getItem(KEY) || "null") ||
-        { balance:0, earned:0, done:{}, joined:{}, withdraws:[] };
+const KEY = "bnddrop_v2";
+let S = JSON.parse(localStorage.getItem(KEY) || "null") || {
+  balance:0, earned:0, done:{}, joined:{}, withdraws:[], orders:[],
+  refCode:null, refInvited:0, refEarned:0, joinedVia:null,
+  mining:{ start:null, banked:0 }
+};
+if (!S.orders) S.orders = [];
+if (!S.mining) S.mining = { start:null, banked:0 };
 
 const $ = id => document.getElementById(id);
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+let tgUser = null;
 if (tg) { tg.ready(); tg.expand();
-  const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
-  if (u && u.first_name) $("hello").textContent = "Hi, " + u.first_name + " • Earn USDT";
+  tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
+  if (tgUser && tgUser.first_name) $("hello").textContent = "Hi, " + tgUser.first_name + " • Earn USDT";
 }
+
+/* Referral code: Telegram user id when available */
+if (!S.refCode) {
+  S.refCode = tgUser && tgUser.id ? "u" + tgUser.id
+            : "u" + Math.random().toString(36).slice(2, 9);
+}
+/* Joined via someone's link? (startapp param) */
+if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+  const sp = tg.initDataUnsafe.start_param;
+  if (sp.indexOf("ref_") === 0 && sp !== "ref_" + S.refCode && !S.joinedVia) {
+    S.joinedVia = sp;
+    setTimeout(() => toast("Welcome! You joined via a referral link"), 600);
+  }
+}
+const refLink = "https://t.me/" + CONFIG.botUsername + "/" + CONFIG.appShortName + "?startapp=ref_" + S.refCode;
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
 function fmt(n){ return n.toFixed(2); }
-
 function toast(msg, err){
   const t = $("toast"); t.textContent = msg;
   t.className = "show" + (err ? " err" : "");
-  setTimeout(()=> t.className = "", 2600);
+  setTimeout(() => t.className = "", 2600);
   if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred(err ? "error" : "success");
 }
 
+/* ---------- Mining ---------- */
+const DAY_MS = 86400000;
+function minedAccrued(){
+  if (!S.mining.start) return 0;
+  const el = Date.now() - S.mining.start;
+  return Math.min(el / DAY_MS, 1) * CONFIG.miningPerDay;
+}
+function mineClaimable(){ return Math.max(0, minedAccrued() - S.mining.banked); }
+
+function renderMining(){
+  const acc = minedAccrued(), claim = mineClaimable();
+  $("mineAmt").textContent = acc.toFixed(6);
+  $("mineBar").style.width = (acc / CONFIG.miningPerDay * 100).toFixed(1) + "%";
+  const running = !!S.mining.start, full = acc >= CONFIG.miningPerDay;
+  $("mineState").innerHTML = !running ? "Not started"
+    : full ? "Session complete — claim your USDT"
+    : '<span class="pulse"></span> Mining… ' + Math.floor((Date.now() - S.mining.start) / 60000) + " min running";
+  $("mineStartBtn").textContent = running ? "Mining…" : (full ? "Start New Session" : "Start Mining");
+  $("mineStartBtn").disabled = running && !full;
+  $("mineClaimBtn").disabled = claim <= 0;
+  $("mineClaimBtn").textContent = claim > 0 ? "Claim $" + claim.toFixed(4) : "Claim";
+}
+$("mineStartBtn").onclick = () => {
+  if (S.mining.start && minedAccrued() < CONFIG.miningPerDay) return;
+  S.mining = { start: Date.now(), banked: 0 }; save(); renderMining();
+  toast("Mining started — $0.50 per day");
+};
+$("mineClaimBtn").onclick = () => {
+  const c = mineClaimable(); if (c <= 0) return;
+  S.balance += c; S.earned += c; S.mining.banked += c;
+  if (minedAccrued() >= CONFIG.miningPerDay) S.mining = { start:null, banked:0 };
+  save(); render(); renderMining();
+  toast("+$" + c.toFixed(4) + " USDT claimed to wallet");
+};
+setInterval(renderMining, 1000);
+
+/* ---------- Render ---------- */
 function render(){
   $("pillBal").textContent = fmt(S.balance);
   $("heroBal").textContent = fmt(S.balance);
   $("statEarned").textContent = fmt(S.earned);
-  $("statPer").textContent = CONFIG.rewardPerTask.toFixed(2);
-  const doneCount = Object.keys(S.done).length;
-  $("statDone").textContent = doneCount;
+  $("statDone").textContent = Object.keys(S.done).length;
+  $("statRefs").textContent = S.refInvited;
+  $("refLink").textContent = refLink;
+  $("refCount").textContent = S.refInvited;
+  $("refEarned").textContent = fmt(S.refEarned);
 
   const list = $("taskList"); list.innerHTML = "";
   CONFIG.tasks.forEach(tk => {
     const done = !!S.done[tk.id], joined = !!S.joined[tk.id];
     const div = document.createElement("div"); div.className = "task";
-    const initial = tk.name.trim().charAt(0).toUpperCase();
     let btn;
     if (done)        btn = `<button class="btn btn-done" disabled>Done ✓</button>`;
     else if (joined) btn = `<button class="btn btn-claim" data-claim="${tk.id}">Claim $${CONFIG.rewardPerTask.toFixed(2)}</button>`;
     else             btn = `<button class="btn btn-join" data-join="${tk.id}">Join</button>`;
     div.innerHTML = `
-      <div class="ava" style="background:${tk.color}">${initial}</div>
+      <div class="ava" style="background:${tk.color}">${tk.name.trim().charAt(0).toUpperCase()}</div>
       <div class="info">
         <div class="name">${tk.name}</div>
         <div class="meta">Join channel • ${tk.members}</div>
@@ -224,7 +375,6 @@ function render(){
       </div>${btn}`;
     list.appendChild(div);
   });
-
   list.querySelectorAll("[data-join]").forEach(b => b.onclick = () => {
     const tk = CONFIG.tasks.find(x => x.id === b.dataset.join);
     S.joined[tk.id] = true; save();
@@ -253,6 +403,18 @@ function render(){
     </div>`).join("");
 }
 
+/* ---------- Referral buttons ---------- */
+$("refCopyBtn").onclick = async () => {
+  try { await navigator.clipboard.writeText(refLink); toast("Referral link copied"); }
+  catch(e) { toast("Copy failed — long-press the link", true); }
+};
+$("refShareBtn").onclick = () => {
+  const url = "https://t.me/share/url?url=" + encodeURIComponent(refLink) +
+              "&text=" + encodeURIComponent("Join BND DROP — complete tasks & mine USDT daily!");
+  if (tg) tg.openTelegramLink(url); else window.open(url, "_blank");
+};
+
+/* ---------- Withdraw ---------- */
 $("wdBtn").onclick = () => {
   const addr = $("wdAddr").value.trim();
   const amt  = parseFloat($("wdAmt").value);
@@ -271,17 +433,68 @@ $("resetBtn").onclick = () => {
   if (confirm("Reset all demo data?")) { localStorage.removeItem(KEY); location.reload(); }
 };
 
+/* ---------- TON Connect ---------- */
+(function initTon(){
+  const status = $("tonStatus");
+  if (window.TON_CONNECT_UI && TON_CONNECT_UI.TonConnectUI) {
+    try {
+      const ui = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: CONFIG.tonManifest,
+        buttonRootId: "tonConnectBtn"
+      });
+      ui.onStatusChange(wallet => {
+        if (wallet && wallet.account && wallet.account.address) {
+          const a = wallet.account.address;
+          status.textContent = "Connected: " + a.slice(0, 8) + "…" + a.slice(-6);
+        } else status.textContent = "Not connected";
+      });
+    } catch(e) { status.textContent = "Open this app inside Telegram to connect TON wallet."; }
+  } else {
+    status.textContent = "Open this app inside Telegram to connect TON wallet.";
+  }
+})();
+
+/* ---------- Promote ---------- */
+function promoPrice(){ return parseInt($("promoMembers").value, 10) / 200 * CONFIG.promotePer200; }
+function renderOrders(){
+  $("promoTotal").textContent = "$" + promoPrice().toFixed(2) + " TON";
+  const ol = $("orderList");
+  if (!S.orders.length) ol.innerHTML = `<div class="empty">No promotion orders yet.</div>`;
+  else ol.innerHTML = S.orders.map(o => `
+    <div class="wd-item">
+      <div><div class="a">${o.members.toLocaleString()} members — $${fmt(o.price)}</div>
+      <div class="d">${o.channel}<br>${o.date} • Est. delivery 24H • Paid in TON</div></div>
+      <span class="badge">${o.status}</span>
+    </div>`).join("");
+}
+$("promoMembers").onchange = renderOrders;
+$("promoBtn").onclick = () => {
+  const link = $("promoLink").value.trim();
+  if (!/^(https:\/\/)?t\.me\/[A-Za-z0-9_]{3,}$/.test(link) && !/^@[A-Za-z0-9_]{3,}$/.test(link))
+    return toast("Enter a valid channel link or @username", true);
+  const members = parseInt($("promoMembers").value, 10);
+  S.orders.unshift({ channel:link, members:members, price:promoPrice(), status:"In Progress",
+    date:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) });
+  save(); renderOrders();
+  $("promoLink").value = "";
+  toast("Order placed! Delivery within ~24 hours");
+};
+
+/* ---------- Tabs ---------- */
 function go(page){
   $("page-tasks").classList.toggle("on", page === "tasks");
+  $("page-promote").classList.toggle("on", page === "promote");
   $("page-wallet").classList.toggle("on", page === "wallet");
   $("tabTasks").classList.toggle("on", page === "tasks");
+  $("tabPromote").classList.toggle("on", page === "promote");
   $("tabWallet").classList.toggle("on", page === "wallet");
   window.scrollTo(0,0);
 }
-$("tabTasks").onclick  = () => go("tasks");
-$("tabWallet").onclick = () => go("wallet");
+$("tabTasks").onclick   = () => go("tasks");
+$("tabPromote").onclick = () => go("promote");
+$("tabWallet").onclick  = () => go("wallet");
 
-render();
+save(); render(); renderMining(); renderOrders();
 </script>
 </body>
 </html>
